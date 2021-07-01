@@ -10,6 +10,8 @@ const Router = require('@koa/router');
 const axios = require('axios');
 dotenv.config();
 
+const charityModel = require('./server/models/charity');
+
 const port = parseInt(process.env.PORT) || 3000;
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -53,6 +55,12 @@ app.prepare().then(() => {
         ctx.body = getProducts.data;
         ctx.statusCode = 200;
 
+    });
+
+    router.get('/getCharities', verifyRequest(), async (ctx, res) => {
+        const charityData = await charityModel.getAllCharities();
+        ctx.body = charityData;
+        ctx.statusCode = 200;
     });
 
     router.get('/deleteProduct', verifyRequest(), async (ctx, res) => {
